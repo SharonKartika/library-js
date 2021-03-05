@@ -30,10 +30,19 @@ function displayLibrary(){
         bookTitle.textContent = 'Title: '+myLibrary[i]['title'];
         let bookAuthor = document.createElement('p');
         bookAuthor.textContent = 'Author: '+myLibrary[i]['author'];
-        
+
+        let removeEntry = document.createElement('button');
+        removeEntry.textContent = 'Delete';
+        removeEntry.addEventListener('click',(e)=>{
+            e.target.parentNode.remove();//removes from DOM
+            myLibrary.splice(i,1); //removes element at i in myLibrary
+            setLib(); //stores myLibrary to localStorage
+        });
 
         book.appendChild(bookTitle);
         book.appendChild(bookAuthor);
+        book.appendChild(removeEntry);//remove button is added
+
         //add an <hr> tag
         book.appendChild(document.createElement('hr'));
         
@@ -49,6 +58,7 @@ function clearBookContainer(){
 
 function setLib(){
     //stores the mylibrary array to localstorage
+    localStorage.clear();//removes everything from localstorage
     for(let i=0;i<myLibrary.length; i++){
         localStorage.setItem(i,JSON.stringify(myLibrary[i]));
     }
@@ -56,9 +66,10 @@ function setLib(){
 
 function getLib(){
     //populates the mulibrary array from localstorage
-    for(let i=0;i<localStorage.length; i++){
+    if (localStorage){
+        for(let i=0;i<localStorage.length; i++){
         let key=localStorage.key(i);
         //stored objects are json strings and need to be parsed in order to be converted to objects
         myLibrary[i]=JSON.parse(localStorage.getItem(key));
-    }
+    }}
 }
